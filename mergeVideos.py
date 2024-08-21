@@ -5,20 +5,13 @@
 import os, sys
 from pathlib import Path
 
-# TODO: Step 1. Create a txt file with 'file + 'video_file.mp4'' lines
 # TODO: Step 2. Execute the proper command in ffmpeg and pass the file
 
-# os.chdir(os.path.dirname(os.path.abspath(__file__)))
-
-# os.chdir('/home/anon/Videos')
 
 videosDir = Path(sys.argv[1])
 
 os.chdir(videosDir)
 
-# print(sys.argv[1])
-
-# listFilename = videosDir
 
 listFile = open('list.txt', 'w')
 
