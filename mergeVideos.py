@@ -9,10 +9,8 @@ def isFilenameValid(videoFileName):
     if properFileNameRegex.match(videoFileName):
         return True
 
-import os, sys, re
+import os, sys, re, subprocess
 from pathlib import Path
-
-# TODO: Step 2. Execute the proper command in ffmpeg and pass the file
 
 
 videosDir = Path(sys.argv[1])
@@ -33,3 +31,5 @@ for folderName, subfolders, filenames in os.walk(videosDir):
             else:
                 print("The video file name can contain only A-Z, a-z, 0-9, '.', '-' or '_'. Please rename the file: " + file + ".")
                 exit()
+
+# After the proper list.txt file is created, the rest(ffmpeg command) is executed in the shell script.
