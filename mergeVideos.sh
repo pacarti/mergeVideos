@@ -2,8 +2,31 @@
 
 path="$@"
 
+if [[ "$path" == */ ]] ; then
+    path=${path::-1}
+fi
+
 python3 mergeVideos.py "$path"
 
-ffmpeg -y -f concat -i "$path/list.txt" -c copy "$path/output.webm"
+exit_code=$?
 
-bash
+case $exit_code in
+    0)
+        exit
+        ;;
+    1) # Folder contains MP4 video files only
+        ffmpeg -y -f concat -i "$path/list.txt" -c copy "$path/output.mp4"
+        ;;
+    2) # Folder contains WEBM video files only
+        ffmpeg -y -f concat -i "$path/list.txt" -c copy "$path/output.webm"
+        ;;
+    3) # Folder contains MKV video files only
+        ffmpeg -y -f concat -i "$path/list.txt" -c copy "$path/output.mkv"
+        ;;
+    
+esac
+
+# if [[ $badFilename ]] ; then
+#     exit
+# fi
+

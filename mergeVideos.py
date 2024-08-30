@@ -27,7 +27,7 @@ mkvFilesCount = 0
 # for folderName, subfolders, filenames in os.walk(videosDir):
     # Sort the filenames alphabetically:
 # filenames.sort()
-for file in os.listdir(videosDir):
+for file in sorted(os.listdir(videosDir)):
     if file.endswith('.mp4'):
         if isFilenameValid(file):
             listFile.write('file ' + '\'' + file + '\'\n')
@@ -39,6 +39,7 @@ for file in os.listdir(videosDir):
 
     elif file.endswith('.webm'):
         if isFilenameValid(file):
+            file.sort()
             listFile.write('file ' + '\'' + file + '\'\n')
             webmFilesCount += 1
         else:
@@ -50,14 +51,22 @@ for file in os.listdir(videosDir):
             mkvFilesCount += 1
         else:
             print("The script applies only to video files in formats: .mp4, .webm. and .mkv. The video file name can contain only A-Z, a-z, 0-9, '.', '-' or '_'.\nPlease rename the file: " + file + ".")
-            exit()
+            sys.exit(0)
         
 if mp4FilesCount > 0 and webmFilesCount == 0 and mkvFilesCount == 0:
-    print("Only MP4 files.")
+    # print("Only MP4 files.")
+    sys.exit(1)
 elif webmFilesCount > 0 and mp4FilesCount == 0 and mkvFilesCount == 0:
-    print("Only WEBM files.")
+    # print("Only WEBM files.")
+    sys.exit(2)
 elif mkvFilesCount > 0 and mp4FilesCount == 0 and webmFilesCount == 0:
-    print("Only MKV files.")
-
+    # print("Only MKV files.")
+    sys.exit(3)
+elif mp4FilesCount > webmFilesCount and mp4FilesCount > mkvFilesCount:
+    print("Majority MP4 files.")
+elif webmFilesCount > mp4FilesCount and webmFilesCount > mkvFilesCount:
+    print("Majority WEBM files.")
+elif mkvFilesCount > webmFilesCount and mkvFilesCount > mp4FilesCount:
+    print("Majority MKV files.")
 
 # After the proper list.txt file is created, the rest(ffmpeg command) is executed in the shell script.
