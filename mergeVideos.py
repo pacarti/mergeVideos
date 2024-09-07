@@ -70,6 +70,7 @@ elif mp4FilesCount > webmFilesCount and mp4FilesCount > mkvFilesCount:
     for file in sorted(os.listdir(videosDir)):
             if file.endswith('.webm') or file.endswith('.mkv'):
                 subprocess.run([os.path.dirname(os.path.abspath(__file__)) + "/./convertToMp4.sh", file])
+                # TODO: Test with mkv and multiple files
             # sys.exit(1)
 elif webmFilesCount > mp4FilesCount and webmFilesCount > mkvFilesCount:
     # print("Majority WEBM files.")
