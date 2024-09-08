@@ -27,6 +27,9 @@ mkvFilesCount = 0
 # for folderName, subfolders, filenames in os.walk(videosDir):
     # Sort the filenames alphabetically:
 # filenames.sort()
+
+# TODO: Make a function from the section below and apply it in case of converting
+
 for file in sorted(os.listdir(videosDir)):
     # print(file)
     if file.endswith('.mp4'):
@@ -70,19 +73,19 @@ elif mp4FilesCount > webmFilesCount and mp4FilesCount > mkvFilesCount:
     for file in sorted(os.listdir(videosDir)):
             if file.endswith('.webm') or file.endswith('.mkv'):
                 subprocess.run([os.path.dirname(os.path.abspath(__file__)) + "/./convertToMp4.sh", file])
-                # TODO: Test with mkv and multiple files
-            # sys.exit(1)
 elif webmFilesCount > mp4FilesCount and webmFilesCount > mkvFilesCount:
     # print("Majority WEBM files.")
     # If the majority is WEBM, convert the rest to webm
-    # for file in sorted(os.listdir(videosDir)):
-    #     if not file.endswith('.webm'):
-    sys.exit(2)
+    for file in sorted(os.listdir(videosDir)):
+            if file.endswith('.mp4') or file.endswith('.mkv'):
+                subprocess.run([os.path.dirname(os.path.abspath(__file__)) + "/./convertToWebm.sh", file])
+    # sys.exit(2)
 elif mkvFilesCount > webmFilesCount and mkvFilesCount > mp4FilesCount:
     # print("Majority MKV files.")
     # If the majority is MKV, convert the rest to mkv
-    # for file in sorted(os.listdir(videosDir)):
-    #     if not file.endswith('.mkv'):
-    sys.exit(3)
+    for file in sorted(os.listdir(videosDir)):
+            if file.endswith('.mp4') or file.endswith('.mkv'):
+                subprocess.run([os.path.dirname(os.path.abspath(__file__)) + "/./convertToMkv.sh", file])
+    # sys.exit(3)
 
 # After the proper list.txt file is created, the rest(ffmpeg command) is executed in the shell script.
