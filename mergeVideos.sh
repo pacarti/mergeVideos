@@ -2,17 +2,21 @@
 
 path="$@"
 
+
 if [[ "$path" == */ ]] ; then
     path=${path::-1}
 fi
 
 python3 mergeVideos.py "$path"
-
 exit_code=$?
+
+if [[ "$path" == '' ]] ; then
+    printf "Please specify the path with video files!\nSyntax: mergeVideos.sh path/to/videofiles\n"
+fi
 
 case $exit_code in
     0)
-        exit
+        echo "sys exit 0"
         ;;
     1) # Folder contains MP4 video files only
         ffmpeg -y -f concat -i "$path/list.txt" -c copy "$path/output.mp4"
@@ -25,8 +29,6 @@ case $exit_code in
         ;;
     
 esac
+# bash
 
-# if [[ $badFilename ]] ; then
-#     exit
-# fi
-
+exit
