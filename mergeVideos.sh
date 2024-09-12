@@ -16,7 +16,7 @@ fi
 
 case $exit_code in
     0)
-        echo "sys exit 0"
+        exit
         ;;
     1) # Folder contains MP4 video files only
         ffmpeg -y -f concat -i "$path/list.txt" -c copy "$path/output.mp4"
