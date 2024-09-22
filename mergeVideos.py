@@ -13,8 +13,6 @@ def isFilenameValid(videoFileName):
 
 def main():
 
-    # videosDir = '/home/anon/Videos/ulomDiss/onlyWebmFiles/'
-
     videosDir = Path(sys.argv[1])  
 
     if sys.argv[1] == '--help':
@@ -64,7 +62,7 @@ def main():
                 listFile.write('file ' + '\'' + file + '\'\n')
         sys.exit(1)
     elif webmFilesCount > 0 and mp4FilesCount == 0 and mkvFilesCount == 0:
-        print("Only WEBM files.")
+        # print("Only WEBM files.")
         for file in sorted(os.listdir(videosDir)):
             if file.endswith('.webm'):
                 listFile.write('file ' + '\'' + file + '\'\n')
