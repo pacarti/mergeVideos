@@ -12,6 +12,7 @@ exit_code=$?
 
 if [[ "$path" == '' ]] ; then
     printf "Please specify the path with video files!\nSyntax: mergeVideos.sh path/to/videofiles\n"
+    exit
 fi
 
 case $exit_code in
@@ -27,6 +28,9 @@ case $exit_code in
     3) # Folder contains MKV video files only
         ffmpeg -y -f concat -i "$path/list.txt" -c copy "$path/output.mkv"
         ;;
+    4) # Folder contains MP3 files only
+        ffmpeg -y -f concat -i "$path/list.txt" -c copy "$path/output.mp3"
+        ;; 
     
 esac
 # bash
