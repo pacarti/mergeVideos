@@ -2,7 +2,7 @@
 
 # mergeVideos.py - creates a txt list of videos that the folder contains. After, it is passed to ffmpeg to merge them. 
 
-# TODO: Add a possibility of automatically renaming a wrong-name file to the proper name
+# TODO: Add removing of the renamed files at the end
 
 import os, sys, re, subprocess, shutil
 from pathlib import Path
