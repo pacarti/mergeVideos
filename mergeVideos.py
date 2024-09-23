@@ -2,7 +2,9 @@
 
 # mergeVideos.py - creates a txt list of videos that the folder contains. After, it is passed to ffmpeg to merge them. 
 
-import os, sys, re, subprocess
+# TODO: Add a possibility of automatically renaming a wrong-name file to the proper name
+
+import os, sys, re, subprocess, shutil
 from pathlib import Path
 
 def isFilenameValid(videoFileName):
@@ -13,13 +15,16 @@ def isFilenameValid(videoFileName):
 
 def main():
 
-    # videosDir = '/home/anon/Videos/ulomDiss/onlyWebmFiles/'
-
     videosDir = Path(sys.argv[1])  
 
-    if sys.argv[1] == '--help':
+    if sys.argv[1] == '':
+        # If the user didn't specify the path, the message is sent in the Bash script, thus here exiting
+        exit()
+
+    elif sys.argv[1] == '--help':
         print("Syntax: mergeVideos.sh path/to/video files")
         exit()
+
     os.chdir(videosDir)
 
 
@@ -28,9 +33,13 @@ def main():
     mp4FilesCount = 0
     webmFilesCount = 0
     mkvFilesCount = 0
+    mp3FilesCount = 0
 
 
-    for file in sorted(os.listdir(videosDir)):
+    newFiles = []
+
+
+    for index, file in enumerate(sorted(os.listdir(videosDir))):
         # print(file)
         if file.endswith('.mp4'):
             if isFilenameValid(file):
@@ -56,25 +65,49 @@ def main():
                 print("The script applies only to video files in formats: .mp4, .webm. and .mkv. The video file name can contain only A-Z, a-z, 0-9, '.', '-' or '_'.\nPlease rename the file: " + file + ".")
                 # sys.exit(0)
                 exit()
-            
-    if mp4FilesCount > 0 and webmFilesCount == 0 and mkvFilesCount == 0:
+        if file.endswith('.mp3'):
+            if isFilenameValid(file):
+                # listFile.write('file ' + '\'' + file + '\'\n')
+                mp3FilesCount += 1
+                # print(file)
+            else:
+                print("The script applies only to video files in formats: .mp4, .webm. and .mkv. The video file name can contain only A-Z, a-z, 0-9, '.', '-' or '_'.")
+                print("Incorrect filename of " + file + ". Copy and rename the file automatically?(It can affect the desired order, the new file will be deleted after merging.)[N/y]:", end='')
+                renameChoice = input()
+                if renameChoice == 'N' or renameChoice == 'n':
+                    print("Please rename the file: " + file + " manually.")
+                    exit()
+                elif renameChoice == 'y' or renameChoice == 'Y':
+                    if index < 10:
+                        newFile = '0' + str(index) + '.mp3'
+                    else:
+                        newFile = str(index) + '.mp3'
+                    shutil.copy(file, newFile)
+                    newFiles.append(newFile)
+                    mp3FilesCount += 1
+    if mp4FilesCount > 0 and webmFilesCount == 0 and mkvFilesCount == 0 and mp3FilesCount == 0:
         # Only MP4 files.
         for file in sorted(os.listdir(videosDir)):
             if file.endswith('.mp4'):
                 listFile.write('file ' + '\'' + file + '\'\n')
         sys.exit(1)
-    elif webmFilesCount > 0 and mp4FilesCount == 0 and mkvFilesCount == 0:
-        print("Only WEBM files.")
+    elif webmFilesCount > 0 and mp4FilesCount == 0 and mkvFilesCount == 0 and mp3FilesCount == 0:
+        # print("Only WEBM files.")
         for file in sorted(os.listdir(videosDir)):
             if file.endswith('.webm'):
                 listFile.write('file ' + '\'' + file + '\'\n')
         sys.exit(2)
-    elif mkvFilesCount > 0 and mp4FilesCount == 0 and webmFilesCount == 0:
+    elif mkvFilesCount > 0 and mp4FilesCount == 0 and webmFilesCount == 0 and mp3FilesCount == 0:
         # Only MKV files.
         for file in sorted(os.listdir(videosDir)):
             if file.endswith('.mkv'):
                 listFile.write('file ' + '\'' + file + '\'\n')
         sys.exit(3)
+    elif mp3FilesCount > 0 and mp4FilesCount == 0 and webmFilesCount == 0 and mkvFilesCount == 0:
+        for file in sorted(os.listdir(videosDir)):
+            if file.endswith('.mp3') and isFilenameValid(file):
+                listFile.write('file ' + '\'' + file + '\'\n')
+        sys.exit(4)
 
     elif mp4FilesCount > webmFilesCount and mp4FilesCount > mkvFilesCount:
         # Majority MP4 files.
