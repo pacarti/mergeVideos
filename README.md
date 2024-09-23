@@ -1,6 +1,6 @@
 <h1>mergeVideos</h1>
 
-<p>Uses FFmpeg to merge the video files in MP4, WEBM or MKV format from one directory into one file.</p>
+<p>Uses FFmpeg to merge the video files in MP4, WEBM or MKV format and audio MP3 files from one directory into one file.</p>
 
 <h2>How it works</h2>
 
@@ -8,6 +8,7 @@
   <li>If the folder contains MP4 files only, then output.mp4 file is generated.</li>
   <li>If the folder contains WEBM files only, then output.webm file is generated.</li>
   <li>If the folder contains MKV files only, then output.mkv file is generated.</li>
+  <li>If the folder contains MKV files only, then output.mp3 file is generated. In that case, if other files are named incorrectly, the script will propose to copy the file and rename it so that the name is correct - the name generated then is the file index(if it's lower than 10 then with 0 added in the beginning).</li>
   <li>If the majority of the files in the folder is in MP4 format, the rest(WEBM or MKV files) will be converted into MP4. Then, output.mp4 file will be generated</li>
   <li>If the majority of the files in the folder is in WEBM format, the rest(MP4 or MKV files) will be converted into WEBM. Then, output.webm file will be generated</li>
   <li>If the majority of the files in the folder is in MKV format, the rest(MP4 or WEBM files) will be converted into MKV. Then, output.mkv file will be generated. <b>Not recommended - in this case, there could be issues with the sound for some files after the merging.</b> What is more advised in this case is to convert all or majority of the files into MP4 or WEBM file formats and then merge it.</li>
