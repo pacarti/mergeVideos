@@ -91,7 +91,11 @@ def main():
             if file.endswith('.mp4'):
                 listFile.write('file ' + '\'' + file + '\'\n')
         sys.exit(1)
+<<<<<<< HEAD
     elif webmFilesCount > 0 and mp4FilesCount == 0 and mkvFilesCount == 0 and mp3FilesCount == 0:
+=======
+    elif webmFilesCount > 0 and mp4FilesCount == 0 and mkvFilesCount == 0:
+>>>>>>> 4eedb0f5716229c5602d26e9564072869f1fa9a8
         # print("Only WEBM files.")
         for file in sorted(os.listdir(videosDir)):
             if file.endswith('.webm'):
