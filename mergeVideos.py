@@ -120,24 +120,30 @@ def main():
         for file in sorted(os.listdir(videosDir)):
             if file.endswith('.mp4') and isFilenameValid(file):
                 listFile.write('file ' + '\'' + file + '\'\n')
-        sys.exit(1)
+        # sys.exit(1)
+        listFile.close()
+        subprocess.run('ffmpeg -y -f concat -i list.txt -c copy output.mp4', shell=True, encoding='utf-8')
     elif webmFilesCount > 0 and mp4FilesCount == 0 and mkvFilesCount == 0 and mp3FilesCount == 0:
         # print("Only WEBM files.")
         for file in sorted(os.listdir(videosDir)):
             if file.endswith('.webm') and isFilenameValid(file):
                 listFile.write('file ' + '\'' + file + '\'\n')
-        sys.exit(2)
+        # sys.exit(2)
+        subprocess.run('ffmpeg -y -f concat -i list.txt -c copy output.webm', shell=True, encoding='utf-8')
     elif mkvFilesCount > 0 and mp4FilesCount == 0 and webmFilesCount == 0 and mp3FilesCount == 0:
         # Only MKV files.
         for file in sorted(os.listdir(videosDir)):
             if file.endswith('.mkv') and isFilenameValid(file):
                 listFile.write('file ' + '\'' + file + '\'\n')
-        sys.exit(3)
+        # sys.exit(3)
+        subprocess.run('ffmpeg -y -f concat -i list.txt -c copy output.mkv', shell=True, encoding='utf-8')
     elif mp3FilesCount > 0 and mp4FilesCount == 0 and webmFilesCount == 0 and mkvFilesCount == 0:
         for file in sorted(os.listdir(videosDir)):
             if file.endswith('.mp3') and isFilenameValid(file):
                 listFile.write('file ' + '\'' + file + '\'\n')
-        sys.exit(4)
+        # sys.exit(4)
+        listFile.close()
+        subprocess.run('ffmpeg -y -f concat -i list.txt -c copy output.mp3', shell=True, encoding='utf-8')
 
     elif mp4FilesCount > webmFilesCount and mp4FilesCount > mkvFilesCount:
         # Majority MP4 files.
@@ -150,7 +156,9 @@ def main():
             if file.endswith('.mp4'):
                 listFile.write('file ' + '\'' + file + '\'\n')
         # Do the concatenation of MP4 files
-        sys.exit(1)
+        # sys.exit(1)
+        listFile.close()
+        subprocess.run('ffmpeg -y -f concat -i list.txt -c copy output.mp4', shell=True, encoding='utf-8')
 
     elif webmFilesCount > mp4FilesCount and webmFilesCount > mkvFilesCount:
         # Majority WEBM files.
@@ -163,7 +171,9 @@ def main():
             if file.endswith('.webm'):
                 listFile.write('file ' + '\'' + file + '\'\n')
         # Do the concatenation of WEBM files
-        sys.exit(2)
+        # sys.exit(2)
+        listFile.close()
+        subprocess.run('ffmpeg -y -f concat -i list.txt -c copy output.webm', shell=True, encoding='utf-8')
 
     elif mkvFilesCount > webmFilesCount and mkvFilesCount > mp4FilesCount:
         # Majority MKV files.
@@ -176,7 +186,11 @@ def main():
             if file.endswith('.mkv'):
                 listFile.write('file ' + '\'' + file + '\'\n')
         # Do the concatenation of MKV files
-        sys.exit(3)
+        # sys.exit(3)
+        listFile.close()
+        subprocess.run('ffmpeg -y -f concat -i list.txt -c copy output.mkv', shell=True, encoding='utf-8')
+
+    
 
 if __name__ == "__main__":
     main()
