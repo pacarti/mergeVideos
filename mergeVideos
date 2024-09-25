@@ -13,10 +13,14 @@ fi
 
 exit_code=$(python3 mergeVideos.py "$path")
 
+python3 mergeVideos.py "$path"
+
 if [[ "$path" == '' ]] ; then
     printf "Please specify the path with video files!\nSyntax: mergeVideos.sh path/to/videofiles\n"
     exit
 fi
+
+: '
 
 case $exit_code in
     0)
@@ -34,7 +38,8 @@ case $exit_code in
     4) # Folder contains MP3 files only
         ffmpeg -y -f concat -i "$path/list.txt" -c copy "$path/output.mp3"
         ;; 
-    
+' :
+
 esac
 # bash
 
