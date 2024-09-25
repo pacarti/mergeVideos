@@ -2,13 +2,16 @@
 
 path="$@"
 
+# path="/home/anon/Music/potegaIrracjonalnosci/noName/0102/"
 
 if [[ "$path" == */ ]] ; then
     path=${path::-1}
 fi
 
-python3 mergeVideos.py "$path"
-exit_code=$?
+# python3 mergeVideos.py "$path"
+# exit_code=$?
+
+exit_code=$(python3 mergeVideos.py "$path")
 
 if [[ "$path" == '' ]] ; then
     printf "Please specify the path with video files!\nSyntax: mergeVideos.sh path/to/videofiles\n"
