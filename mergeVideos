@@ -38,9 +38,12 @@ case $exit_code in
     4) # Folder contains MP3 files only
         ffmpeg -y -f concat -i "$path/list.txt" -c copy "$path/output.mp3"
         ;; 
-' :
+
 
 esac
+
+' :
+
 # bash
 
 exit
