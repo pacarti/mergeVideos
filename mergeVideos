@@ -2,16 +2,9 @@
 
 path="$@"
 
-# path="/home/anon/Music/potegaIrracjonalnosci/noName/0102/"
-
 if [[ "$path" == */ ]] ; then
     path=${path::-1}
 fi
-
-# python3 mergeVideos.py "$path"
-# exit_code=$?
-
-exit_code=$(python3 mergeVideos.py "$path")
 
 python3 mergeVideos.py "$path"
 
@@ -19,30 +12,6 @@ if [[ "$path" == '' ]] ; then
     printf "Please specify the path with video files!\nSyntax: mergeVideos.sh path/to/videofiles\n"
     exit
 fi
-
-: '
-
-case $exit_code in
-    0)
-        exit
-        ;;
-    1) # Folder contains MP4 video files only
-        ffmpeg -y -f concat -i "$path/list.txt" -c copy "$path/output.mp4"
-        ;;
-    2) # Folder contains WEBM video files only
-        ffmpeg -y -f concat -i "$path/list.txt" -c copy "$path/output.webm"
-        ;;
-    3) # Folder contains MKV video files only
-        ffmpeg -y -f concat -i "$path/list.txt" -c copy "$path/output.mkv"
-        ;;
-    4) # Folder contains MP3 files only
-        ffmpeg -y -f concat -i "$path/list.txt" -c copy "$path/output.mp3"
-        ;; 
-
-
-esac
-
-' :
 
 # bash
 
