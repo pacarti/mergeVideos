@@ -17,6 +17,9 @@ def main():
 
     videosDir = Path(sys.argv[1])  
 
+    # videosDir = '/home/anon/Videos/mp4Files/'
+
+
     if sys.argv[1] == '':
         # If the user didn't specify the path, the message is sent in the Bash script, thus here exiting
         exit()
@@ -24,6 +27,7 @@ def main():
     elif sys.argv[1] == '--help':
         print("Syntax: mergeVideos.sh path/to/video files")
         exit()
+
 
     os.chdir(videosDir)
 
@@ -120,7 +124,6 @@ def main():
         for file in sorted(os.listdir(videosDir)):
             if file.endswith('.mp4') and isFilenameValid(file):
                 listFile.write('file ' + '\'' + file + '\'\n')
-        # sys.exit(1)
         listFile.close()
         subprocess.run('ffmpeg -y -f concat -i list.txt -c copy output.mp4', shell=True, encoding='utf-8')
     elif webmFilesCount > 0 and mp4FilesCount == 0 and mkvFilesCount == 0 and mp3FilesCount == 0:
@@ -128,20 +131,17 @@ def main():
         for file in sorted(os.listdir(videosDir)):
             if file.endswith('.webm') and isFilenameValid(file):
                 listFile.write('file ' + '\'' + file + '\'\n')
-        # sys.exit(2)
         subprocess.run('ffmpeg -y -f concat -i list.txt -c copy output.webm', shell=True, encoding='utf-8')
     elif mkvFilesCount > 0 and mp4FilesCount == 0 and webmFilesCount == 0 and mp3FilesCount == 0:
         # Only MKV files.
         for file in sorted(os.listdir(videosDir)):
             if file.endswith('.mkv') and isFilenameValid(file):
                 listFile.write('file ' + '\'' + file + '\'\n')
-        # sys.exit(3)
         subprocess.run('ffmpeg -y -f concat -i list.txt -c copy output.mkv', shell=True, encoding='utf-8')
     elif mp3FilesCount > 0 and mp4FilesCount == 0 and webmFilesCount == 0 and mkvFilesCount == 0:
         for file in sorted(os.listdir(videosDir)):
             if file.endswith('.mp3') and isFilenameValid(file):
                 listFile.write('file ' + '\'' + file + '\'\n')
-        # sys.exit(4)
         listFile.close()
         subprocess.run('ffmpeg -y -f concat -i list.txt -c copy output.mp3', shell=True, encoding='utf-8')
 
@@ -150,13 +150,13 @@ def main():
         # If the majority is MP4, convert the rest to mp4
         for file in os.listdir(videosDir):
                 if file.endswith('.webm') or file.endswith('.mkv'):
-                    subprocess.run([os.path.dirname(os.path.abspath(__file__)) + "/./convertToMp4.sh", file])
+                    pfile = Path(file)
+                    subprocess.run(f'ffmpeg -i {file} -c:v libx264 -crf 15 -c:a aac {pfile.stem}.mp4', shell=True, encoding='utf-8')
         # After the conversion, write the new converted filenames to list.txt
         for file in sorted(os.listdir(videosDir)):
             if file.endswith('.mp4'):
                 listFile.write('file ' + '\'' + file + '\'\n')
         # Do the concatenation of MP4 files
-        # sys.exit(1)
         listFile.close()
         subprocess.run('ffmpeg -y -f concat -i list.txt -c copy output.mp4', shell=True, encoding='utf-8')
 
@@ -165,13 +165,14 @@ def main():
         # If the majority is WEBM, convert the rest to webm
         for file in os.listdir(videosDir):
                 if file.endswith('.mp4') or file.endswith('.mkv'):
-                    subprocess.run([os.path.dirname(os.path.abspath(__file__)) + "/./convertToWebm.sh", file])
+                    # subprocess.run([os.path.dirname(os.path.abspath(__file__)) + "/./convertToWebm.sh", file])
+                    pfile = Path(file)
+                    subprocess.run(f'ffmpeg -i {file} -c:v libvpx -crf 15 -b:v 1M -c:a libvorbis {pfile.stem}.webm', shell=True, encoding='utf-8')
         # After the conversion, write the new converted filenames to list.txt
         for file in sorted(os.listdir(videosDir)):
             if file.endswith('.webm'):
                 listFile.write('file ' + '\'' + file + '\'\n')
         # Do the concatenation of WEBM files
-        # sys.exit(2)
         listFile.close()
         subprocess.run('ffmpeg -y -f concat -i list.txt -c copy output.webm', shell=True, encoding='utf-8')
 
@@ -180,13 +181,13 @@ def main():
         # If the majority is MKV, convert the rest to mkv
         for file in os.listdir(videosDir):
                 if file.endswith('.mp4') or file.endswith('.webm'):
-                    subprocess.run([os.path.dirname(os.path.abspath(__file__)) + "/./convertToMkv.sh", file])
+                    pfile = Path(file)
+                    subprocess.run(f'ffmpeg -i {file} -c:v libx264 -c:a aac {pfile.stem}.mkv', shell=True, encoding='utf-8')
         # After the conversion, write the new converted filenames to list.txt
         for file in sorted(os.listdir(videosDir)):
             if file.endswith('.mkv'):
                 listFile.write('file ' + '\'' + file + '\'\n')
         # Do the concatenation of MKV files
-        # sys.exit(3)
         listFile.close()
         subprocess.run('ffmpeg -y -f concat -i list.txt -c copy output.mkv', shell=True, encoding='utf-8')
 
@@ -194,5 +195,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-# After the proper list.txt file is created, the rest(ffmpeg command) is executed in the shell script.
