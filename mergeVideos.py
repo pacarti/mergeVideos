@@ -191,7 +191,16 @@ def main():
         listFile.close()
         subprocess.run('ffmpeg -y -f concat -i list.txt -c copy output.mkv', shell=True, encoding='utf-8')
 
-    
+
+    # Delete the renamed files
+    for file in sorted(os.listdir(videosDir)):
+        if file in newFiles:
+            os.unlink(file)
+
+    # Remove the list.txt file
+    os.unlink('list.txt')
+
+
 
 if __name__ == "__main__":
     main()
