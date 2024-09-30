@@ -2,8 +2,6 @@
 
 # mergeVideos.py - creates a txt list of videos that the folder contains. After, it is passed to ffmpeg to merge them. 
 
-# TODO: Add removing of the renamed files at the end
-
 import os, sys, re, subprocess, shutil
 from pathlib import Path
 
@@ -16,8 +14,6 @@ def isFilenameValid(videoFileName):
 def main():
 
     videosDir = Path(sys.argv[1])  
-
-    # videosDir = '/home/anon/Videos/mp4Files/'
 
 
     if sys.argv[1] == '':
